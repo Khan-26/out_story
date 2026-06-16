@@ -1,0 +1,9 @@
+{
+  "name": "ourstory",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm install --prefix screen && npm run build --prefix screen && npm install --prefix script && npm run build --prefix script",
+    "start": "npm run start:prod --prefix script"
+  }
+}

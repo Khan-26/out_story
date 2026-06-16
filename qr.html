@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code — Our Story ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --rose: #c0516d;
+      --rose-md: #e8758a;
+      --rose-light: #f9d0d8;
+      --dark: #1a0a0f;
+      --dark-mid: #2d1520;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1a0a0f 0%, #2d1520 50%, #1a0a0f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─ Floating hearts ─ */
+    .hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+    .heart {
+      position: absolute;
+      bottom: -60px;
+      font-size: var(--sz);
+      opacity: 0;
+      animation: floatUp var(--dur) var(--delay) infinite ease-in;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.3; }
+      90%  { opacity: 0.15; }
+      100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+    }
+
+    /* ─ Card ─ */
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(249,208,216,0.2);
+      border-radius: 28px;
+      padding: 48px 44px 52px;
+      text-align: center;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(249,208,216,0.08);
+      max-width: 420px;
+      width: 92vw;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 0.9s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .top-heart {
+      font-size: 48px;
+      margin-bottom: 14px;
+      display: block;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(192,81,109,0.3)); }
+      50%       { transform: scale(1.12); filter: drop-shadow(0 0 24px rgba(192,81,109,0.7)); }
+    }
+
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 38px;
+      color: #f9d0d8;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 20px rgba(249,208,216,0.3);
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #c090a0;
+      letter-spacing: 0.5px;
+      margin-bottom: 34px;
+    }
+
+    /* ─ QR wrapper ─ */
+    .qr-wrap {
+      display: inline-flex;
+      padding: 18px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.35), 0 0 0 4px rgba(192,81,109,0.25);
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    /* Corner decorators */
+    .qr-wrap::before,
+    .qr-wrap::after {
+      content: '❤️';
+      position: absolute;
+      font-size: 18px;
+    }
+    .qr-wrap::before { top: -12px; left: -10px; }
+    .qr-wrap::after  { bottom: -12px; right: -10px; }
+
+    #qrcode canvas, #qrcode img { display: block; border-radius: 8px; }
+
+    .url-label {
+      font-size: 13px;
+      color: #c090a0;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .url-box {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(249,208,216,0.2);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 15px;
+      color: #f9d0d8;
+      letter-spacing: 0.5px;
+      word-break: break-all;
+      margin-bottom: 28px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .url-box:hover { background: rgba(255,255,255,0.12); }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(249,208,216,0.25);
+      margin: 0 auto 20px;
+    }
+
+    .instruction {
+      font-size: 13px;
+      color: #a07080;
+      line-height: 1.9;
+    }
+    .instruction strong { color: #e8b4c0; font-weight: 700; }
+
+    .tip {
+      margin-top: 22px;
+      font-size: 12px;
+      color: #806070;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating hearts -->
+  <div class="hearts" id="hearts"></div>
+
+  <div class="card">
+    <span class="top-heart">❤️</span>
+    <h1>Our Story</h1>
+    <p class="subtitle">Quét mã QR để mở món quà bí mật</p>
+
+    <div class="qr-wrap">
+      <div id="qrcode"></div>
+    </div>
+
+    <p class="url-label">Hoặc truy cập trực tiếp</p>
+    <div class="url-box" id="url-display" onclick="copyUrl()"></div>
+
+    <div class="divider"></div>
+
+    <p class="instruction">
+      <strong>📱 Trên điện thoại:</strong> Mở Camera và quét mã QR<br />
+      <strong>💻 Trên máy tính:</strong> Click vào link phía trên<br />
+      <strong>📡 Yêu cầu:</strong> Cùng mạng Wi-Fi với máy tính này
+    </p>
+
+    <p class="tip" id="copy-hint">Click vào link để sao chép</p>
+  </div>
+
+  <script>
+    // ─ Detect URL ─
+    // Tries to use the current host; falls back to the known LAN IP
+    const LAN_IP   = '192.168.1.20';
+    const APP_PORT = '5173';
+
+    function buildUrl() {
+      const host = location.hostname;
+      // If opened from the LAN IP directly, use that; otherwise use default LAN IP
+      const ip = (host && host !== 'localhost' && host !== '127.0.0.1') ? host : LAN_IP;
+      return `http://${ip}:${APP_PORT}`;
+    }
+
+    const APP_URL = buildUrl();
+
+    // ─ Render QR ─
+    const qr = new QRCode(document.getElementById('qrcode'), {
+      text:           APP_URL,
+      width:          220,
+      height:         220,
+      colorDark:      '#2d1520',
+      colorLight:     '#ffffff',
+      correctLevel:   QRCode.CorrectLevel.H,
+    });
+
+    // ─ Show URL ─
+    const urlBox = document.getElementById('url-display');
+    urlBox.textContent = APP_URL;
+
+    // ─ Copy URL ─
+    function copyUrl() {
+      navigator.clipboard.writeText(APP_URL).then(() => {
+        const hint = document.getElementById('copy-hint');
+        hint.textContent = '✅ Đã sao chép!';
+        setTimeout(() => hint.textContent = 'Click vào link để sao chép', 2000);
+      });
+    }
+
+    // ─ Floating hearts ─
+    const EMOJIS = ['❤️', '🌸', '💕', '✨', '💖'];
+    const container = document.getElementById('hearts');
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('span');
+      el.className = 'heart';
+      el.textContent = EMOJIS[i % EMOJIS.length];
+      el.style.setProperty('--sz', `${12 + Math.random() * 20}px`);
+      el.style.setProperty('--dur', `${6 + Math.random() * 8}s`);
+      el.style.setProperty('--delay', `${Math.random() * 6}s`);
+      el.style.left = `${Math.random() * 100}%`;
+      container.appendChild(el);
+    }
+  </script>
+</body>
+</html>
