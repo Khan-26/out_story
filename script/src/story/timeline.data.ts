@@ -56,7 +56,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Những kỷ niệm nhỏ, nhưng anh trân trọng từng khoảnh khắc',
     description:
       'Những buổi hẹn hò, những cuộc trò chuyện không hồi kết, những bữa ăn nhỏ bên nhau, mỗi thứ như đều trở nên đặc biệt hơn khi có em ở đó cùng anh.',
-    images: ['us_cute.jpg','us_cute_2.jpg','us_cute_3.jpg','us_cute_4.jpg','us_cute_5.png','concept_cuoi.jpg'],
+    images: ['us_cute.JPG','us_cute_2.JPG','us_cute_3.jpg','us_cute_4.jpg','us_cute_5.PNG','concept_cuoi.jpg'],
     emoji: '😍',
     highlight: false,
     tags: ['Hẹn Hò', 'Kỷ Niệm'],
@@ -104,9 +104,8 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
       'em_da_lat_0.jpg',
       'anh_dala_1.JPG',
       'anh_dalat_2.jpeg',
-      'anh_da_lat_3.CR2',
       'anh_da_lat_5.JPG',
-      'anh_da_lat_6.JPG',
+      'anh_da_lat_4.jpg',
       'anh_da_lat_7.JPG',
     ],
     emoji: '🌿💨🥖🥛',
@@ -121,7 +120,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Cây cầu vàng, trời xanh và máng trượt siêu tốc',
     description:
       'Ba Na Hills với cây cầu vàng nổi tiếng, những cảnh đẹp như tranh vẽ, và những trò chơi thú vị.\n Nhớ cảm giác ngồi cùng em trên chiếc xe điện, rồi mình lái để đi tông những người khác, lúc đó điên với vui vl kk.\n Rồi tới khúc ngồi xe trượt, cùng trượt quanh những khúc cua ngay sườn núi, cảm giác hồi hợp và cũng thật hạnh phúc cùng iemm\n Và mình đã cùng nhau đi phố cổ Hội An, chụp những bức ảnh thật đẹp, ăn những món ăn thật ngon, trải nghiệm những cảm giác mà trước đó khi đi với công ty anh đã luôn muốn chia sẻ cùng em.',
-    images: ['ba_na_hill.JPG','em_hoi_an.png','em_hoi_an_2.png','em_da_nang.jpg'],
+    images: ['ba_na_hill.JPG','em_hoi_an.PNG','em_hoi_an_2.PNG','em_da_nang.jpg'],
     emoji: '⛅🚗',
     highlight: false,
     tags: ['Du Lịch', 'Đà Nẵng', 'Hội An', 'Bà Nà Hills'],
@@ -147,7 +146,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Một chuyến đi với biết bao điều khùm điên được làm cùng nhau :v',
     description:
       'Chuyến đi với biết bao địa điểm đẹp, những trận ma sói chửi mẫu thân của nhau, những chầu hải sản ăn ngập mồm nhưng rẻ vô đối, và tất nhiên là những kỷ niệm đáng nhớ cùng nhau.',
-    images: ['anh_vinh_hy.JPG','homie_vinh_hy.png','us_vinh_hy.jpg'],
+    images: ['anh_vinh_hy.JPG','homie_vinh_hy.PNG','us_vinh_hy.jpg'],
     emoji: '⛵🤝🐺',
     highlight: false,
     tags: ['Du Lịch', 'Vĩnh Hy'],
@@ -160,7 +159,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Lần đầu tiên đi du lịch cùng ba mẹ em',
     description:
       'Một chuyến đi đáng nhớ cùng gia đình em, có ba, có mẹ, có bà Bảy, dì Nhi và có cả bạn em.\n Một chuyến đi đầy kỷ niệm cùng gia đình, tuy mệt nhưng lại rất vui',
-    images: ['em_tay_ninh.jpg'],
+    images: ['em_tay_ninh.JPG'],
     emoji: '',
     highlight: true,
     tags: ['Du Lịch','Gia Đình']
@@ -173,7 +172,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     subtitle: 'Những món quà, những ngày kỉ niệm, những ngày lễ và những món quà dành tặng cho nhau',
     description:
       'Cùng nhau đón kỉ niệm tháng, năm, trăm ngày và những dịp đặc biệt, trao nhau những món quà, những lời chúc, và những kỉ niệm đáng nhớ. Những khoảnh khắc này sẽ luôn là một phần quan trọng trong câu chuyện tình yêu của chúng mình.',
-    images: ['anni_concept.PNG','loi_chuc_cua_em.jpg','banh_em_tang.png','qua_cua_em.jpg','700_day.jpg','qua_2_nam.jpg','qua_anni.jpg'],
+    images: ['anni_concept.PNG','loi_chuc_cua_em.jpg','banh_em_tang.PNG','qua_cua_em.JPG','700_day.JPG','qua_2_nam.jpg','qua_anni.jpg'],
     emoji: '💑',
     highlight: false,
     tags: ['Anniversary','Special Days','Special Gift'],
