@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { getBgAudio } from '../../services/audio';
 import { fetchTimeline, fetchMeta } from '../../services/api';
 import TimelineItem from './TimelineItem';
 import FloatingHearts from '../../components/FloatingHearts';
@@ -24,9 +25,16 @@ export default function Journey() {
   const [events, setEvents] = useState([]);
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [muted, setMuted] = useState(false);
   const navigate = useNavigate();
   const { scrollYProgress } = useScroll();
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  const toggleMute = () => {
+    const audio = getBgAudio();
+    audio.muted = !audio.muted;
+    setMuted((m) => !m);
+  };
 
   useEffect(() => {
     Promise.all([fetchTimeline(), fetchMeta()])
@@ -55,6 +63,17 @@ export default function Journey() {
       transition={{ duration: 0.5 }}
     >
       <FloatingHearts count={20} dark={false} />
+
+      {/* Mute button */}
+      <motion.button
+        style={s.muteBtn}
+        onClick={toggleMute}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        title={muted ? 'Bật nhạc' : 'Tắt nhạc'}
+      >
+        {muted ? '🔇' : '🎵'}
+      </motion.button>
 
       {/* Scroll progress bar */}
       <div style={s.progressBg}>
@@ -159,6 +178,24 @@ const s = {
     background: 'linear-gradient(180deg, #fff5f8 0%, #fff0f4 50%, #fce8ef 100%)',
     position: 'relative',
     overflowX: 'hidden',
+  },
+  muteBtn: {
+    position: 'fixed',
+    bottom: 24,
+    right: 24,
+    zIndex: 200,
+    width: 46,
+    height: 46,
+    borderRadius: '50%',
+    background: 'rgba(255,255,255,0.85)',
+    border: '1px solid rgba(192,81,109,0.25)',
+    boxShadow: '0 4px 16px rgba(192,81,109,0.2)',
+    backdropFilter: 'blur(8px)',
+    cursor: 'pointer',
+    fontSize: 20,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   progressBg: {
     position: 'fixed',

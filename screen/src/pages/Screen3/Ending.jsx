@@ -1,25 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getImageUrl } from '../../services/api';
+import FloatingHearts from '../../components/FloatingHearts';
 
 const TOTAL_DAYS = 900;
-const FINAL_IMAGE = 'loi_chuc_cua_em.jpg';
 
-const HEART_RAIN_COUNT = 35;
-const RAIN_HEARTS = Array.from({ length: HEART_RAIN_COUNT }, (_, i) => ({
-  id: i,
-  left: Math.random() * 100,
-  size: 14 + Math.random() * 26,
-  duration: 4 + Math.random() * 7,
-  delay: Math.random() * 6,
-  drift: (Math.random() - 0.5) * 60,
-  emoji: ['❤️', '💕', '🌸', '💖', '💝', '🌹'][i % 6],
-}));
 
 export default function Ending() {
   const [count, setCount] = useState(0);
-  const [phase, setPhase] = useState(0); // 0→title 1→counter 2→message 3→image 4→final
+  const [phase, setPhase] = useState(0); // 0→title 1→counter 2→message 3→final
   const navigate = useNavigate();
   const counterRef = useRef(null);
 
@@ -29,7 +18,6 @@ export default function Ending() {
       setTimeout(() => setPhase(1), 600),
       setTimeout(() => setPhase(2), 2200),
       setTimeout(() => setPhase(3), 3600),
-      setTimeout(() => setPhase(4), 5000),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -57,8 +45,7 @@ export default function Ending() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.7 }}
     >
-      {/* Heart rain background */}
-      <HeartRain />
+      <FloatingHearts count={28} dark={true} />
 
       <div style={s.content}>
         {/* Title */}
@@ -112,41 +99,28 @@ export default function Ending() {
               <p style={s.poem}>
                 Cảm ơn em đã là người đã bước vào cuộc đời anh,
                 <br />
-                đã cùng anh vượt qua bao ngày tháng,
+                đã cùng anh trải biết bao khó khăn,
                 <br />
-                đã cho anh thấy rằng tình yêu thật sự tồn tại.
+                đã cho anh những tình yêu thương cháy bỏng.
                 <br />
+                tuy có những lúc mình cãi vã, giận dỗi, không hiểu nhau
                 <br />
+                nhưng sau cùng đã thông cảm cho nhau và vẫn luôn ở bên nhau.
+                <br/>
+                <br/>
                 Dù thế giới có thay đổi ra sao,
                 <br />
-                anh vẫn muốn được bên cạnh em — mãi mãi.
+                hay sau này em có thế nào đi nữa
+                <br/>
+                anh vẫn sẽ luôn ở bên em, yêu thương em, chiều chuộng em hết lòng mình.
               </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Final image */}
-        <AnimatePresence>
-          {phase >= 3 && (
-            <motion.div
-              style={s.imageWrap}
-              initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.9, type: 'spring', stiffness: 120 }}
-            >
-              <img
-                src={getImageUrl(FINAL_IMAGE)}
-                alt="Lời chúc của em"
-                style={s.finalImg}
-              />
-              <div style={s.imgOverlay} />
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Final declaration */}
         <AnimatePresence>
-          {phase >= 4 && (
+          {phase >= 3 && (
             <motion.div
               style={s.declaration}
               initial={{ opacity: 0, y: 30 }}
@@ -158,7 +132,7 @@ export default function Ending() {
                 animate={{ scale: [1, 1.04, 1] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
               >
-                Anh yêu em mãi mãi ❤️
+                Anh yêu Dánh Dánh cụa anh ❤️
               </motion.h2>
               <p style={s.declSub}>— Hành trình 900 ngày, và còn nhiều hơn nữa —</p>
 
@@ -188,40 +162,6 @@ export default function Ending() {
   );
 }
 
-function HeartRain() {
-  return (
-    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
-      {RAIN_HEARTS.map((h) => (
-        <motion.span
-          key={h.id}
-          style={{
-            position: 'absolute',
-            top: -80,
-            left: `${h.left}%`,
-            fontSize: h.size,
-            opacity: 0,
-            userSelect: 'none',
-          }}
-          animate={{
-            y: [0, window.innerHeight + 100],
-            x: [0, h.drift],
-            opacity: [0, 0.5, 0.4, 0],
-            rotate: [0, h.drift * 2],
-          }}
-          transition={{
-            duration: h.duration,
-            delay: h.delay,
-            repeat: Infinity,
-            repeatDelay: Math.random() * 2,
-            ease: 'linear',
-          }}
-        >
-          {h.emoji}
-        </motion.span>
-      ))}
-    </div>
-  );
-}
 
 const s = {
   page: {
@@ -318,25 +258,6 @@ const s = {
     color: '#d090a0',
     lineHeight: 2,
     fontStyle: 'italic',
-  },
-  imageWrap: {
-    position: 'relative',
-    borderRadius: 20,
-    overflow: 'hidden',
-    boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 0 0 2px rgba(249,208,216,0.2)',
-    maxWidth: 380,
-    width: '100%',
-  },
-  finalImg: {
-    width: '100%',
-    display: 'block',
-    objectFit: 'cover',
-    aspectRatio: '4/3',
-  },
-  imgOverlay: {
-    position: 'absolute',
-    inset: 0,
-    background: 'linear-gradient(to top, rgba(26,10,15,0.6) 0%, transparent 60%)',
   },
   declaration: {},
   declTitle: {

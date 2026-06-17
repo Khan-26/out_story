@@ -3,243 +3,301 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QR Code — Our Story ❤️</title>
+  <title>Jane Bakery — Đánh giá sản phẩm</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lato:wght@300;400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nunito:wght@300;400;600;700;800&display=swap"
     rel="stylesheet"
   />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    :root {
-      --rose: #c0516d;
-      --rose-md: #e8758a;
-      --rose-light: #f9d0d8;
-      --dark: #1a0a0f;
-      --dark-mid: #2d1520;
-    }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      min-height: 100vh;
-      background: linear-gradient(160deg, #1a0a0f 0%, #2d1520 50%, #1a0a0f 100%);
+      background: #f0e0e8;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: 'Lato', sans-serif;
-      overflow: hidden;
+      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
+      padding: 20px;
     }
 
-    /* ─ Floating hearts ─ */
-    .hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
-    .heart {
-      position: absolute;
-      bottom: -60px;
-      font-size: var(--sz);
-      opacity: 0;
-      animation: floatUp var(--dur) var(--delay) infinite ease-in;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
-      10%  { opacity: 0.3; }
-      90%  { opacity: 0.15; }
-      100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
-    }
-
-    /* ─ Card ─ */
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(249,208,216,0.2);
-      border-radius: 28px;
-      padding: 48px 44px 52px;
-      text-align: center;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(249,208,216,0.08);
-      max-width: 420px;
-      width: 92vw;
-      position: relative;
-      z-index: 2;
-      animation: fadeIn 0.9s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px) scale(0.95); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .top-heart {
-      font-size: 48px;
-      margin-bottom: 14px;
-      display: block;
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(192,81,109,0.3)); }
-      50%       { transform: scale(1.12); filter: drop-shadow(0 0 24px rgba(192,81,109,0.7)); }
-    }
-
-    h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 38px;
-      color: #f9d0d8;
-      margin-bottom: 6px;
-      text-shadow: 0 2px 20px rgba(249,208,216,0.3);
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #c090a0;
-      letter-spacing: 0.5px;
-      margin-bottom: 34px;
-    }
-
-    /* ─ QR wrapper ─ */
-    .qr-wrap {
-      display: inline-flex;
-      padding: 18px;
+    /* ── Print hint bar (hidden on print) ── */
+    .print-hint {
       background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.35), 0 0 0 4px rgba(192,81,109,0.25);
-      margin-bottom: 28px;
-      position: relative;
-    }
-
-    /* Corner decorators */
-    .qr-wrap::before,
-    .qr-wrap::after {
-      content: '❤️';
-      position: absolute;
-      font-size: 18px;
-    }
-    .qr-wrap::before { top: -12px; left: -10px; }
-    .qr-wrap::after  { bottom: -12px; right: -10px; }
-
-    #qrcode canvas, #qrcode img { display: block; border-radius: 8px; }
-
-    .url-label {
+      border: 1px solid #e0c0cc;
+      border-radius: 10px;
+      padding: 10px 20px;
       font-size: 13px;
-      color: #c090a0;
-      margin-bottom: 6px;
-      letter-spacing: 0.5px;
+      color: #a06070;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-
-    .url-box {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(249,208,216,0.2);
-      border-radius: 12px;
-      padding: 10px 18px;
-      font-size: 15px;
-      color: #f9d0d8;
-      letter-spacing: 0.5px;
-      word-break: break-all;
-      margin-bottom: 28px;
+    .print-hint button {
+      background: #e8758a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
-    }
-    .url-box:hover { background: rgba(255,255,255,0.12); }
-
-    .divider {
-      width: 40px;
-      height: 1px;
-      background: rgba(249,208,216,0.25);
-      margin: 0 auto 20px;
     }
 
-    .instruction {
-      font-size: 13px;
-      color: #a07080;
-      line-height: 1.9;
+    /* ── Card ── */
+    .card {
+      width: 72mm;
+      min-height: 148mm; /* A6 */
+      background: linear-gradient(160deg, #e8608a 0%, #c0406a 40%, #9b2050 100%);
+      border-radius: 16px;
+      padding: 28px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(150,40,80,0.35);
     }
-    .instruction strong { color: #e8b4c0; font-weight: 700; }
 
-    .tip {
-      margin-top: 22px;
-      font-size: 12px;
-      color: #806070;
+    /* Background decorative blobs */
+    .card::before {
+      content: '';
+      position: absolute;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+      top: -50px; right: -50px;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 100px; height: 100px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      bottom: 30px; left: -30px;
+    }
+
+    /* ── Top icon row ── */
+    .icon-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    /* ── Brand ── */
+    .brand {
+      font-family: 'Dancing Script', cursive;
+      font-size: 36px;
+      color: #fde68a;
+      line-height: 1;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      letter-spacing: 1px;
+    }
+    .brand-line {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #fde68a, transparent);
+      margin: 6px auto 18px;
+    }
+
+    /* ── Gold divider dots ── */
+    .dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: #fde68a; opacity: 0.7; }
+    .dot.lg { width: 8px; height: 8px; opacity: 1; }
+
+    /* ── Title ── */
+    .title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      letter-spacing: 0.2px;
+    }
+    .title em {
+      font-style: normal;
+      color: #fde68a;
+    }
+
+    /* ── Subtitle ── */
+    .subtitle {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.88);
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+    .heart { color: #fbb6ce; }
+
+    /* ── QR wrapper ── */
+    .qr-wrap {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      border: 3px solid #fde68a;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    #qrcode canvas, #qrcode img { display: block; border-radius: 6px; }
+
+    /* Corner hearts on QR */
+    .qr-corner {
+      position: absolute;
+      font-size: 14px;
+    }
+    .qr-corner.tl { top: -10px; left: -8px; }
+    .qr-corner.tr { top: -10px; right: -8px; }
+    .qr-corner.bl { bottom: -10px; left: -8px; }
+    .qr-corner.br { bottom: -10px; right: -8px; }
+
+    /* ── Note ── */
+    .note {
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
       font-style: italic;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .note::before { content: '* '; }
+
+    /* ── Closing ── */
+    .closing {
+      font-size: 12px;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    /* ── Bottom icon row ── */
+    .bottom-icons {
+      display: flex;
+      gap: 10px;
+      font-size: 18px;
+      opacity: 0.75;
+      margin-top: auto;
+    }
+
+    /* ── Print styles ── */
+    @media print {
+      @page {
+        size: A5 portrait;
+        margin: 8mm;
+      }
+      .print-hint { display: none !important; }
+      body {
+        margin: 0;
+        padding: 0;
+        background: none;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .card {
+        width: 72%;
+        min-height: unset;
+        border-radius: 12px;
+        box-shadow: none;
+        zoom: 0.72;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating hearts -->
-  <div class="hearts" id="hearts"></div>
+  <!-- Print hint — không in ra -->
+  <div class="print-hint">
+    💡 Nhấn <button onclick="window.print()">In / Lưu PDF</button> để xuất file in &nbsp;·&nbsp; Khuyên dùng khổ A6 hoặc 90×148 mm
+  </div>
 
   <div class="card">
-    <span class="top-heart">❤️</span>
-    <h1>Our Story</h1>
-    <p class="subtitle">Quét mã QR để mở món quà bí mật</p>
 
+    <!-- Top icons -->
+    <div class="icon-row">🧁 🎂 🥐 🍰 🍩</div>
+
+    <!-- Brand -->
+    <div class="brand">Jane Bakery</div>
+    <div class="brand-line"></div>
+
+    <!-- Divider dots -->
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot lg"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <!-- Title -->
+    <p class="title">
+      Cảm ơn bạn đã mua sản phẩm<br/>
+      bên <em>Jane Bakery</em> 🎀
+    </p>
+
+    <!-- Subtitle -->
+    <p class="subtitle">
+      Hiện tại bên chúng mình có chương trình<br/>
+      <strong style="color:#fde68a;">đánh giá sản phẩm đổi lấy quà</strong>, bạn quét<br/>
+      mã QR bên dưới để giúp bọn mình<br/>
+      đánh giá nha <span class="heart">❤️</span>
+    </p>
+
+    <!-- QR code -->
     <div class="qr-wrap">
+      <span class="qr-corner tl">🌸</span>
+      <span class="qr-corner tr">🌸</span>
+      <span class="qr-corner bl">🌸</span>
+      <span class="qr-corner br">🌸</span>
       <div id="qrcode"></div>
     </div>
 
-    <p class="url-label">Hoặc truy cập trực tiếp</p>
-    <div class="url-box" id="url-display" onclick="copyUrl()"></div>
+    <!-- Note -->
+    <p class="note">Khuyến khích dùng tab để dễ điền thông tin hơn</p>
 
-    <div class="divider"></div>
-
-    <p class="instruction">
-      <strong>📱 Trên điện thoại:</strong> Mở Camera và quét mã QR<br />
-      <strong>💻 Trên máy tính:</strong> Click vào link phía trên<br />
-      <strong>📡 Yêu cầu:</strong> Cùng mạng Wi-Fi với máy tính này
+    <!-- Closing -->
+    <p class="closing">
+      Cảm ơn bạn đã dành thời gian đánh giá<br/>
+      Chúc bạn một ngày thật tốt lành! ✨
     </p>
 
-    <p class="tip" id="copy-hint">Click vào link để sao chép</p>
+    <!-- Bottom icons -->
+    <div class="bottom-icons">🍪 🧇 🍮 🫐 🍓</div>
+
   </div>
 
   <script>
-    // ─ Detect URL ─
-    // Tries to use the current host; falls back to the known LAN IP
-    const LAN_IP   = '192.168.1.20';
-    const APP_PORT = '5173';
+    const APP_URL = 'https://out-story.onrender.com/';
 
-    function buildUrl() {
-      const host = location.hostname;
-      // If opened from the LAN IP directly, use that; otherwise use default LAN IP
-      const ip = (host && host !== 'localhost' && host !== '127.0.0.1') ? host : LAN_IP;
-      return `http://${ip}:${APP_PORT}`;
-    }
-
-    const APP_URL = buildUrl();
-
-    // ─ Render QR ─
-    const qr = new QRCode(document.getElementById('qrcode'), {
-      text:           APP_URL,
-      width:          220,
-      height:         220,
-      colorDark:      '#2d1520',
-      colorLight:     '#ffffff',
-      correctLevel:   QRCode.CorrectLevel.H,
+    new QRCode(document.getElementById('qrcode'), {
+      text:         APP_URL,
+      width:        180,
+      height:       180,
+      colorDark:    '#6b1030',
+      colorLight:   '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H,
     });
-
-    // ─ Show URL ─
-    const urlBox = document.getElementById('url-display');
-    urlBox.textContent = APP_URL;
-
-    // ─ Copy URL ─
-    function copyUrl() {
-      navigator.clipboard.writeText(APP_URL).then(() => {
-        const hint = document.getElementById('copy-hint');
-        hint.textContent = '✅ Đã sao chép!';
-        setTimeout(() => hint.textContent = 'Click vào link để sao chép', 2000);
-      });
-    }
-
-    // ─ Floating hearts ─
-    const EMOJIS = ['❤️', '🌸', '💕', '✨', '💖'];
-    const container = document.getElementById('hearts');
-    for (let i = 0; i < 18; i++) {
-      const el = document.createElement('span');
-      el.className = 'heart';
-      el.textContent = EMOJIS[i % EMOJIS.length];
-      el.style.setProperty('--sz', `${12 + Math.random() * 20}px`);
-      el.style.setProperty('--dur', `${6 + Math.random() * 8}s`);
-      el.style.setProperty('--delay', `${Math.random() * 6}s`);
-      el.style.left = `${Math.random() * 100}%`;
-      container.appendChild(el);
-    }
   </script>
 </body>
 </html>

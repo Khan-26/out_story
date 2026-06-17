@@ -36,28 +36,20 @@ function Drum({ value, min, max, onChange, label, itemH, drumW }) {
   const yMV  = useMotionValue(getY(value));
   const anim = useAnimation();
   const [liveVal, setLiveVal] = useState(value);
-  const sfxRef       = useRef(null);
-  const mountedRef   = useRef(false);
+  const prevValRef = useRef(value);
 
-  useEffect(() => {
-    sfxRef.current = new Audio('/music/effect/soundEffect_Conbination_lock.mp3');
-    sfxRef.current.volume = 0.55;
-    return () => { sfxRef.current = null; };
-  }, []);
-
-  // Phát sound mỗi khi liveVal thay đổi (bỏ qua lần render đầu)
-  useEffect(() => {
-    if (!mountedRef.current) { mountedRef.current = true; return; }
-    if (sfxRef.current) {
-      sfxRef.current.currentTime = 0;
-      sfxRef.current.play().catch(() => {});
-    }
-  }, [liveVal]);
-
+  // Phát sound ngay khi giá trị đổi trong lúc kéo — tạo Audio mới mỗi lần
+  // để các tiếng tick liên tiếp không bị browser hủy lệnh play() đè nhau
   useMotionValueEvent(yMV, 'change', (latest) => {
     const idx = Math.round((-latest + offset) / itemH);
     const v   = Math.max(0, Math.min(count - 1, idx)) + min;
-    setLiveVal((prev) => (prev !== v ? v : prev));
+    if (v !== prevValRef.current) {
+      prevValRef.current = v;
+      setLiveVal(v);
+      const sfx = new Audio('/music/effect/soundEffect_Conbination_lock.mp3');
+      sfx.volume = 0.55;
+      sfx.play().catch(() => {});
+    }
   });
 
   useEffect(() => {
@@ -385,8 +377,12 @@ export default function GiftReveal() {
                   animate={phase !== 'gift' ? { y: -160, rotate: -25, opacity: 0, scale: 0.6 } : { y: 0, rotate: 0, opacity: 1, scale: 1 }}
                   transition={{ duration: 0.65, ease: [0.68, -0.55, 0.265, 1.55] }}
                 >
-                  <span style={s.bow}>🎀</span>
                   <div style={s.lidRibbon} />
+                  <div style={s.bowWrap}>
+                    <div style={s.bowLoopLeft} />
+                    <div style={s.bowLoopRight} />
+                    <div style={s.bowKnot} />
+                  </div>
                 </motion.div>
 
                 <div style={s.body}>
@@ -509,12 +505,15 @@ const s = {
 
   giftSection: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32, width: '100%' },
   giftWrap:   { position: 'relative', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', userSelect: 'none' },
-  lid:        { width: 190, height: 52, background: 'linear-gradient(135deg, #d43a58, #b02040)', borderRadius: '10px 10px 4px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', boxShadow: '0 6px 25px rgba(192,40,64,0.55)', zIndex: 2 },
-  bow:        { fontSize: 40, position: 'absolute', top: -28, lineHeight: 1, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))' },
-  lidRibbon:  { position: 'absolute', inset: 0, width: 22, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(90deg, #ffcc00, #e6a800)', borderRadius: 2 },
-  body:       { width: 190, height: 170, background: 'linear-gradient(160deg, #c0283f, #8a1228)', borderRadius: '4px 4px 14px 14px', position: 'relative', boxShadow: '0 24px 60px rgba(176,20,56,0.45)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  bodyRibbonH:{ position: 'absolute', height: 22, top: '50%', transform: 'translateY(-50%)', left: 0, right: 0, background: 'linear-gradient(180deg, #ffcc00, #e6a800)', zIndex: 1 },
-  bodyRibbonV:{ position: 'absolute', width: 22, left: '50%', transform: 'translateX(-50%)', top: 0, bottom: 0, background: 'linear-gradient(90deg, #ffcc00, #e6a800)', zIndex: 1 },
+  lid:        { width: 196, height: 36, background: '#f0506a', borderRadius: '6px 6px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', boxShadow: '0 4px 12px rgba(0,0,0,0.25)', zIndex: 2 },
+  lidRibbon:  { position: 'absolute', inset: 0, width: 26, left: '50%', transform: 'translateX(-50%)', background: '#ffcc33' },
+  bowWrap:    { position: 'absolute', top: -20, left: '50%', transform: 'translateX(-50%)', width: 64, height: 32, zIndex: 3 },
+  bowLoopLeft:  { position: 'absolute', left: 0, top: 2, width: 30, height: 24, background: '#ffcc33', borderRadius: '50% 50% 50% 6px', transform: 'rotate(-20deg)', boxShadow: '0 2px 5px rgba(0,0,0,0.3)' },
+  bowLoopRight: { position: 'absolute', right: 0, top: 2, width: 30, height: 24, background: '#ffcc33', borderRadius: '50% 50% 6px 50%', transform: 'rotate(20deg)', boxShadow: '0 2px 5px rgba(0,0,0,0.3)' },
+  bowKnot:      { position: 'absolute', left: '50%', top: 8, width: 16, height: 16, background: '#e6a800', transform: 'translateX(-50%) rotate(45deg)', borderRadius: 3, boxShadow: '0 1px 4px rgba(0,0,0,0.35)' },
+  body:       { width: 186, height: 150, background: '#e8395a', borderRadius: '0 0 10px 10px', position: 'relative', boxShadow: '0 12px 30px rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  bodyRibbonH:{ position: 'absolute', height: 26, top: '50%', transform: 'translateY(-50%)', left: 0, right: 0, background: '#ffcc33', zIndex: 1 },
+  bodyRibbonV:{ position: 'absolute', width: 26, left: '50%', transform: 'translateX(-50%)', top: 0, bottom: 0, background: '#ffcc33', zIndex: 1 },
   glow:       { position: 'absolute', width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,240,160,0.95) 0%, rgba(255,200,80,0.6) 50%, transparent 70%)', zIndex: 2 },
   message:    { textAlign: 'center', width: '100%' },
   title:      { fontFamily: "'Dancing Script', cursive", fontSize: 'clamp(42px,10vw,62px)', color: '#f9d0d8', marginBottom: 14, textShadow: '0 2px 30px rgba(249,208,216,0.4)', lineHeight: 1.1 },

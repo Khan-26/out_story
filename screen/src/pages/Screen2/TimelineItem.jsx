@@ -54,7 +54,7 @@ export default function TimelineItem({ event, index }) {
               {event.images.map((img, i) => (
                 <motion.div
                   key={img}
-                  style={s.imgWrap}
+                  style={s.imgWrap(event.images.length)}
                   whileHover={{ scale: 1.04 }}
                   onClick={() => setLightbox(img)}
                 >
@@ -136,9 +136,9 @@ const s = {
     background: highlight
       ? 'linear-gradient(135deg, #8b2040, #c0516d)'
       : 'linear-gradient(135deg, #c0516d, #e8758a)',
-    borderRadius: 20,
-    padding: '6px 16px',
-    maxWidth: 120,
+    borderRadius: 16,
+    padding: '7px 16px',
+    maxWidth: 190,
     boxShadow: highlight ? '0 4px 14px rgba(139,32,64,0.35)' : 'none',
   }),
   labelText: {
@@ -147,7 +147,10 @@ const s = {
     fontFamily: "'Dancing Script', cursive",
     fontWeight: 600,
     letterSpacing: 0.4,
-    whiteSpace: 'nowrap',
+    whiteSpace: 'normal',
+    textAlign: 'center',
+    lineHeight: 1.25,
+    display: 'block',
   },
   card: (highlight) => ({
     flex: 1,
@@ -207,19 +210,20 @@ const s = {
     lineHeight: 1.8,
     marginBottom: 18,
     fontFamily: "'Lato', sans-serif",
+    whiteSpace: 'pre-line',
   },
   gallery: (count) => ({
     display: 'grid',
-    gridTemplateColumns: count === 1 ? '1fr' : count === 2 ? '1fr 1fr' : 'repeat(3, 1fr)',
-    gap: 8,
+    gridTemplateColumns: count === 1 ? '1fr' : 'repeat(2, 1fr)',
+    gap: 10,
   }),
-  imgWrap: {
-    borderRadius: 12,
+  imgWrap: (count) => ({
+    borderRadius: 14,
     overflow: 'hidden',
     cursor: 'pointer',
-    aspectRatio: '4/3',
+    aspectRatio: count === 1 ? '16/10' : '4/3',
     background: '#f0d8e0',
-  },
+  }),
   img: {
     width: '100%',
     height: '100%',
