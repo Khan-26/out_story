@@ -6,6 +6,7 @@ const isCJK  = (str) => str.length === 1 && str.charCodeAt(0) > 0x2E7F;
 
 export default function FloatingHearts({ count = 28, dark = true }) {
   const items = useMemo(() => {
+    const mob = window.innerWidth < 480;
     const result = [];
 
     for (let i = 0; i < count; i++) {
@@ -31,8 +32,8 @@ export default function FloatingHearts({ count = 28, dark = true }) {
         driftKeys:   [0, driftX * 0.25, driftX * 0.6, driftX * 0.4, driftX],
       });
 
-      // ── 1-3 bong bóng nhỏ theo kèm ──
-      const miniCount = 1 + Math.floor(Math.random() * 3);
+      // ── 1 mini bubble on mobile, 1-3 on desktop ──
+      const miniCount = mob ? 1 : 1 + Math.floor(Math.random() * 3);
       for (let j = 0; j < miniCount; j++) {
         const sz      = 6 + Math.random() * 10;   // 6-16 px
         const minDrift = (Math.random() - 0.5) * 70;

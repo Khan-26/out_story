@@ -156,7 +156,8 @@ const LIGHT_RAYS = Array.from({ length: 7 }, (_, i) => ({
   dur:     3.5 + i * 0.55,
   delay:   i * 0.38,
 }));
-const OCEAN_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
+const _PARTICLE_COUNT = window.innerWidth < 480 ? 14 : 28;
+const OCEAN_PARTICLES = Array.from({ length: _PARTICLE_COUNT }, (_, i) => ({
   id: i,
   left:   Math.random() * 100,
   top:    Math.random() * 100,
@@ -167,11 +168,28 @@ const OCEAN_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
   driftX: (Math.random() - 0.5) * 18,
 }));
 
+// Generate CSS keyframes once at module load — runs on GPU compositor, no JS per frame
+const _OCEAN_CSS = [
+  ...LIGHT_RAYS.map(r => `@keyframes or${r.id}{
+    0%,100%{opacity:${(r.opBase*0.4).toFixed(4)}}
+    40%{opacity:${r.opBase.toFixed(4)}}
+    65%{opacity:${(r.opBase*0.6).toFixed(4)}}
+    80%{opacity:${(r.opBase*0.9).toFixed(4)}}
+  }`),
+  ...OCEAN_PARTICLES.map(p => `@keyframes op${p.id}{
+    0%,100%{opacity:0;transform:translate(0,0)}
+    25%{opacity:.55}
+    50%{opacity:.3;transform:translate(${p.driftX.toFixed(1)}px,${p.driftY.toFixed(1)}px)}
+    75%{opacity:.55}
+  }`),
+].join('');
+
 function OceanBackground() {
   return (
     <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+      <style>{_OCEAN_CSS}</style>
       {LIGHT_RAYS.map((r) => (
-        <motion.div
+        <div
           key={r.id}
           style={{
             position: 'absolute', top: 0, left: `${r.left}%`,
@@ -179,25 +197,21 @@ function OceanBackground() {
             background: 'linear-gradient(to bottom, rgba(80,205,255,0.13), rgba(40,150,210,0.04), transparent)',
             transform: `rotate(${r.angle}deg)`,
             transformOrigin: 'top center',
+            animation: `or${r.id} ${r.dur}s ${r.delay}s infinite ease-in-out`,
+            willChange: 'opacity',
           }}
-          animate={{ opacity: [r.opBase * 0.4, r.opBase, r.opBase * 0.6, r.opBase * 0.9, r.opBase * 0.4] }}
-          transition={{ duration: r.dur, delay: r.delay, repeat: Infinity, ease: 'easeInOut' }}
         />
       ))}
       {OCEAN_PARTICLES.map((p) => (
-        <motion.div
+        <div
           key={p.id}
           style={{
             position: 'absolute', left: `${p.left}%`, top: `${p.top}%`,
             width: p.size, height: p.size, borderRadius: '50%',
             background: 'rgba(140,225,255,0.45)',
+            animation: `op${p.id} ${p.dur}s ${p.delay}s infinite ease-in-out`,
+            willChange: 'opacity, transform',
           }}
-          animate={{
-            opacity: [0, 0.55, 0.3, 0.55, 0],
-            y: [0, p.driftY, 0, -p.driftY, 0],
-            x: [0, p.driftX, 0, -p.driftX, 0],
-          }}
-          transition={{ duration: p.dur, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
         />
       ))}
     </div>
@@ -255,7 +269,7 @@ export default function GiftReveal() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={s.page}>
       <OceanBackground />
-      <FloatingHearts count={22} dark />
+      <FloatingHearts count={mob ? 12 : 22} dark />
 
       <div style={{ ...s.center, padding: sz.centerPad }}>
 
