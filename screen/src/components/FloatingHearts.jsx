@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-const EMOJIS = ['❤️', '🐟', '♪', '📖', '🌸', '🌏', '📸', '☁', '嗯'];
+const EMOJIS = ['❤️', '🐟', '♪', '📖', '🌸', '🌏', '📸', '☁', '恩'];
 const isCJK  = (str) => str.length === 1 && str.charCodeAt(0) > 0x2E7F;
 
 export default function FloatingHearts({ count = 28, dark = true }) {
